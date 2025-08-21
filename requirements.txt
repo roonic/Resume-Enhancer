@@ -6,5 +6,6 @@ google-generativeai
 reportlab
 python-dotenv
 matplotlib
+gunicorn
 
 
