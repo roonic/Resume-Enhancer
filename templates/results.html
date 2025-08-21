@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Enhancement Results - AI-Powered Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✔️</text></svg>">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            
+            /* Custom gradients for each score */
+            --overall-gradient: linear-gradient(135deg, #a855f7 0%, #4f46e5 100%);
+            --skills-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            --experience-gradient: linear-gradient(135deg, #eab308 0%, #f97316 100%);
+            --education-gradient: linear-gradient(135deg, #22c55e 0%, #14b8a6 100%);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 60%, rgba(59, 130, 246, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .score-circle-outer {
+            width: 96px; /* w-24 */
+            height: 96px; /* h-24 */
+            border-radius: 9999px; /* rounded-full */
+            position: relative;
+        }
+        
+        .score-circle-inner {
+            background: var(--primary-gradient);
+            backdrop-filter: blur(10px);
+            width: 80px; /* w-20 */
+            height: 80px; /* h-20 */
+            border-radius: 9999px; /* rounded-full */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .score-circle-progress {
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            mask-image: radial-gradient(circle at center, transparent 40px, white 40px);
+            -webkit-mask-image: radial-gradient(circle at center, transparent 40px, white 40px);
+            transform: rotate(var(--angle));
+            transition: transform 1s ease-out;
+            background: var(--circle-gradient);
+        }
+        
+        .progress-bar {
+            background: var(--bar-gradient);
+            border-radius: 10px;
+            height: 8px;
+            position: relative;
+            overflow: hidden;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1s ease-out;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); width: 100%; }
+            100% { transform: translateX(100%); width: 100%; }
+        }
+
+        /* Standard CSS for other sections remains unchanged */
+        .suggestion-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px 0 rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px 0 rgba(6, 182, 212, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .enhanced-resume {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-element:nth-child(1) { top: 10%; left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; width: 60px; height: 60px; animation-delay: 2s; }
+        .floating-element:nth-child(3) { bottom: 10%; left: 15%; width: 100px; height: 100px; animation-delay: 4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <header class="text-white py-16 text-center relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="relative bg-white bg-opacity-10 p-6 rounded-full backdrop-filter backdrop-blur-sm mb-6 inline-block">
+                <i class="fas fa-chart-line text-5xl text-cyan-400"></i>
+            </div>
+            <h1 class="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
+                Enhancement Results
+            </h1>
+            <p class="text-xl text-gray-100 mb-8">Your resume has been analyzed and optimized for ATS systems</p>
+            
+            <div class="flex flex-wrap justify-center gap-4 text-sm">
+                <span class="bg-green-500 bg-opacity-20 px-4 py-2 rounded-full backdrop-filter backdrop-blur-sm border border-green-400 border-opacity-30">
+                    <i class="fas fa-check-circle mr-2 text-green-300"></i>Analysis Complete
+                </span>
+                <span class="bg-blue-500 bg-opacity-20 px-4 py-2 rounded-full backdrop-filter backdrop-blur-sm border border-blue-400 border-opacity-30">
+                    <i class="fas fa-robot mr-2 text-blue-300"></i>AI Enhanced
+                </span>
+                <span class="bg-purple-500 bg-opacity-20 px-4 py-2 rounded-full backdrop-filter backdrop-blur-sm border border-purple-400 border-opacity-30">
+                    <i class="fas fa-download mr-2 text-purple-300"></i>Ready to Download
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 relative z-10">
+        <div class="max-w-7xl mx-auto space-y-12">
+            
+            <div class="glass-card rounded-3xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                    <i class="fas fa-tachometer-alt mr-3 text-cyan-400"></i>
+                    ATS Compatibility Scores
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="metric-card rounded-2xl p-6 text-center">
+                        <div class="score-circle-outer mx-auto mb-4">
+                            <div class="score-circle-progress" id="overallScoreProgress" data-score="{{ ats_result.overall_match }}" data-gradient="var(--overall-gradient)"></div>
+                            <div class="score-circle-inner flex items-center justify-center">
+                                <span class="text-2xl font-bold text-white">{{ ats_result.overall_match }}%</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Overall Match</h3>
+                        <div class="progress-bar w-full" style="--width: {{ ats_result.overall_match }}%; --bar-gradient: var(--overall-gradient);"></div>
+                    </div>
+                    
+                    <div class="metric-card rounded-2xl p-6 text-center">
+                        <div class="score-circle-outer mx-auto mb-4">
+                            <div class="score-circle-progress" id="skillsScoreProgress" data-score="{{ ats_result.skills_match }}" data-gradient="var(--skills-gradient)"></div>
+                            <div class="score-circle-inner flex items-center justify-center">
+                                <span class="text-2xl font-bold text-white">{{ ats_result.skills_match }}%</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Skills Match</h3>
+                        <div class="progress-bar w-full" style="--width: {{ ats_result.skills_match }}%; --bar-gradient: var(--skills-gradient);"></div>
+                    </div>
+                    
+                    <div class="metric-card rounded-2xl p-6 text-center">
+                        <div class="score-circle-outer mx-auto mb-4">
+                            <div class="score-circle-progress" id="experienceScoreProgress" data-score="{{ ats_result.experience_match }}" data-gradient="var(--experience-gradient)"></div>
+                            <div class="score-circle-inner flex items-center justify-center">
+                                <span class="text-2xl font-bold text-white">{{ ats_result.experience_match }}%</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Experience Match</h3>
+                        <div class="progress-bar w-full" style="--width: {{ ats_result.experience_match }}%; --bar-gradient: var(--experience-gradient);"></div>
+                    </div>
+                    
+                    <div class="metric-card rounded-2xl p-6 text-center">
+                        <div class="score-circle-outer mx-auto mb-4">
+                            <div class="score-circle-progress" id="educationScoreProgress" data-score="{{ ats_result.education_match }}" data-gradient="var(--education-gradient)"></div>
+                            <div class="score-circle-inner flex items-center justify-center">
+                                <span class="text-2xl font-bold text-white">{{ ats_result.education_match }}%</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Education Match</h3>
+                        <div class="progress-bar w-full" style="--width: {{ ats_result.education_match }}%; --bar-gradient: var(--education-gradient);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                    <i class="fas fa-lightbulb mr-3 text-yellow-400"></i>
+                    AI Recommendations
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="suggestion-card rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Missing Skills</h3>
+                        </div>
+                        <div class="space-y-2">
+                            {% for skill in suggestions.missing_skills %}
+                            <div class="bg-red-500 bg-opacity-20 px-3 py-2 rounded-lg text-red-200 text-sm">
+                                <i class="fas fa-plus mr-2"></i>{{ skill }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="suggestion-card rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-star text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Emphasize Skills</h3>
+                        </div>
+                        <div class="space-y-2">
+                            {% for skill in suggestions.emphasize_skills %}
+                            <div class="bg-yellow-500 bg-opacity-20 px-3 py-2 rounded-lg text-yellow-200 text-sm">
+                                <i class="fas fa-arrow-up mr-2"></i>{{ skill }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="suggestion-card rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-layer-group text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Structure Improvements</h3>
+                        </div>
+                        <div class="space-y-2">
+                            {% for item in suggestions.section_reorganization %}
+                            <div class="bg-blue-500 bg-opacity-20 px-3 py-2 rounded-lg text-blue-200 text-sm">
+                                <i class="fas fa-arrows-alt mr-2"></i>{{ item }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="suggestion-card rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Additional Tips</h3>
+                        </div>
+                        <div class="space-y-2">
+                            {% for item in suggestions.other_recommendations %}
+                            <div class="bg-green-500 bg-opacity-20 px-3 py-2 rounded-lg text-green-200 text-sm">
+                                <i class="fas fa-thumbs-up mr-2"></i>{{ item }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold text-white">
+                        <i class="fas fa-file-alt mr-3 text-green-400"></i>
+                        Your Enhanced Resume
+                    </h2>
+                    {% if pdf_generated %}
+                    <button class="btn-primary px-6 py-3 rounded-xl font-semibold text-white">
+                        <i class="fas fa-download mr-2"></i>Download PDF
+                    </button>
+                    {% endif %}
+                </div>
+                
+                <div class="enhanced-resume rounded-2xl p-6">
+                    <pre class="text-gray-800 text-sm leading-relaxed">{{ enhanced_resume | safe }}</pre>
+                </div>
+                
+                {% if pdf_generated %}
+                <div class="flex justify-center space-x-4 mt-8">
+                    <a href="/download" class="btn-primary px-8 py-4 rounded-xl font-semibold text-white inline-flex items-center">
+                        <i class="fas fa-download mr-3"></i>Download PDF
+                    </a>
+                    <button class="btn-secondary px-8 py-4 rounded-xl font-semibold text-white inline-flex items-center" data-copy>
+                        <i class="fas fa-copy mr-3"></i>Copy Text
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="text-center">
+                <div class="glass-card rounded-2xl p-8 inline-block">
+                    <h3 class="text-2xl font-semibold text-white mb-6">What's Next?</h3>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="/" class="btn-primary px-8 py-4 rounded-xl font-semibold text-white inline-flex items-center justify-center">
+                            <i class="fas fa-plus mr-3"></i>Enhance Another Resume
+                        </a>
+                        <button class="btn-secondary px-8 py-4 rounded-xl font-semibold text-white inline-flex items-center justify-center">
+                            <i class="fas fa-share-alt mr-3"></i>Share Results
+                        </button>
+                    </div>
+                    <p class="text-gray-300 text-sm mt-4">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Your enhanced resume is optimized for ATS systems and tailored to your target job
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Copy text functionality
+        document.querySelector('[data-copy]')?.addEventListener('click', function() {
+            const resumeText = document.querySelector('.enhanced-resume pre').textContent;
+            navigator.clipboard.writeText(resumeText).then(() => {
+                this.innerHTML = '<i class="fas fa-check mr-3"></i>Copied!';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy mr-3"></i>Copy Text';
+                }, 2000);
+            });
+        });
+
+        // Animate progress bars on load
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.getPropertyValue('--width');
+                bar.style.transform = `scaleX(calc(${width} / 100))`;
+            });
+        }
+        
+        // Animate score circles on load
+        function animateScoreCircles() {
+            const scoreCircles = document.querySelectorAll('.score-circle-progress');
+            scoreCircles.forEach(circle => {
+                const score = circle.dataset.score;
+                const gradient = circle.dataset.gradient;
+                const angle = (score / 100) * 360;
+                circle.style.setProperty('--angle', `${angle}deg`);
+                circle.style.background = gradient;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            animateProgressBars();
+            animateScoreCircles();
+            
+            // Add smooth hover effects
+            const cards = document.querySelectorAll('.metric-card, .suggestion-card, .glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Enhancer - AI-Powered ATS Optimization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .upload-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover {
+            border-color: #4facfe;
+            background: #f0f8ff;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .results-section {
+            display: none;
+            margin-top: 2rem;
+        }
+        
+        .score-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .suggestions-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <div class="header">
+                <h1><i class="fas fa-file-alt"></i> Resume Enhancer</h1>
+                <p class="mb-0">AI-Powered ATS Optimization & Resume Enhancement</p>
+            </div>
+            
+            <div class="p-4">
+                <form id="resumeForm" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="upload-section">
+                                <h4><i class="fas fa-upload"></i> Upload Resume</h4>
+                                <p class="text-muted">Upload your resume in PDF format</p>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="resume" name="resume" accept=".pdf" class="file-input" required>
+                                    <label for="resume" class="file-input-label">
+                                        <i class="fas fa-cloud-upload-alt"></i> Choose PDF File
+                                    </label>
+                                </div>
+                                <div id="resumeFileName" class="file-name"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="upload-section">
+                                <h4><i class="fas fa-briefcase"></i> Job Description</h4>
+                                <p class="text-muted">Paste job description or upload file</p>
+                                <textarea id="jobDescription" name="job_description" class="form-control mb-3" rows="6" placeholder="Paste job description here..."></textarea>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="jobDescFile" name="job_description_file" accept=".pdf,.txt" class="file-input">
+                                    <label for="jobDescFile" class="file-input-label">
+                                        <i class="fas fa-file-upload"></i> Or Upload File (PDF/TXT)
+                                    </label>
+                                </div>
+                                <div id="jobDescFileName" class="file-name"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic"></i> Enhance Resume
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <h4>Analyzing your resume...</h4>
+                    <p>This may take a few moments while we process your documents with AI.</p>
+                </div>
+                
+                <div class="results-section" id="results">
+                    <div class="score-card">
+                        <h3>ATS Match Score</h3>
+                        <div class="score-number" id="atsScore">--</div>
+                        <p>Out of 100</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h4>Skills Analysis</h4>
+                                <canvas id="skillsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h4>Match Overview</h4>
+                                <canvas id="matchChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="suggestions-container">
+                        <h4><i class="fas fa-lightbulb"></i> AI Suggestions</h4>
+                        <div id="suggestions"></div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/download" class="btn btn-success btn-lg" id="downloadBtn">
+                            <i class="fas fa-download"></i> Download Enhanced Resume
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File input handlers
+        document.getElementById('resume').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            document.getElementById('resumeFileName').textContent = fileName ? `Selected: ${fileName}` : '';
+        });
+        
+        document.getElementById('jobDescFile').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            document.getElementById('jobDescFileName').textContent = fileName ? `Selected: ${fileName}` : '';
+        });
+        
+        // Form submission
+        document.getElementById('resumeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+        
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            
+            // Display ATS score
+            if (data.ats_result && data.ats_result.score) {
+                document.getElementById('atsScore').textContent = data.ats_result.score;
+            }
+            
+            // Create skills chart
+            if (data.ats_result && data.ats_result.matching_skills && data.ats_result.missing_skills) {
+                createSkillsChart(data.ats_result.matching_skills, data.ats_result.missing_skills);
+            }
+            
+            // Create match chart
+            if (data.ats_result && data.ats_result.score) {
+                createMatchChart(data.ats_result.score);
+            }
+            
+            // Display suggestions
+            if (data.gemini_suggestions) {
+                document.getElementById('suggestions').innerHTML = 
+                    '<pre style="white-space: pre-wrap; font-family: inherit;">' + 
+                    data.gemini_suggestions + '</pre>';
+            }
+            
+            results.style.display = 'block';
+        }
+        
+        function createSkillsChart(matchingSkills, missingSkills) {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Matching Skills', 'Missing Skills'],
+                    datasets: [{
+                        data: [matchingSkills.length, missingSkills.length],
+                        backgroundColor: ['#4facfe', '#ff6b6b'],
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createMatchChart(score) {
+            const ctx = document.getElementById('matchChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Match', 'Gap'],
+                    datasets: [{
+                        data: [score, 100 - score],
+                        backgroundColor: ['#4facfe', '#e9ecef'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

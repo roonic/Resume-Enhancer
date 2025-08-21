@@ -1,0 +1,10 @@
+Flask
+Flask-CORS
+PyMuPDF
+requests
+google-generativeai
+reportlab
+python-dotenv
+matplotlib
+
+
