@@ -212,60 +212,59 @@
     </header>
 
     <main class="container mx-auto px-6 py-12 relative z-10">
-        <div class="max-w-7xl mx-auto space-y-12">
             
-            <div class="glass-card rounded-3xl p-8">
-                <h2 class="text-3xl font-bold text-white mb-8 text-center">
-                    <i class="fas fa-tachometer-alt mr-3 text-cyan-400"></i>
-                    ATS Compatibility Scores
-                </h2>
-                
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="metric-card rounded-2xl p-6 text-center">
-                        <div class="score-circle-outer mx-auto mb-4">
-                            <div class="score-circle-progress" id="overallScoreProgress" data-score="{{ ats_result.overall_match }}" data-gradient="var(--overall-gradient)"></div>
-                            <div class="score-circle-inner flex items-center justify-center">
-                                <span class="text-2xl font-bold text-white">{{ ats_result.overall_match }}%</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Overall Match</h3>
-                        <div class="progress-bar w-full" style="--width: {{ ats_result.overall_match }}%; --bar-gradient: var(--overall-gradient);"></div>
-                    </div>
-                    
-                    <div class="metric-card rounded-2xl p-6 text-center">
-                        <div class="score-circle-outer mx-auto mb-4">
-                            <div class="score-circle-progress" id="skillsScoreProgress" data-score="{{ ats_result.skills_match }}" data-gradient="var(--skills-gradient)"></div>
-                            <div class="score-circle-inner flex items-center justify-center">
-                                <span class="text-2xl font-bold text-white">{{ ats_result.skills_match }}%</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Skills Match</h3>
-                        <div class="progress-bar w-full" style="--width: {{ ats_result.skills_match }}%; --bar-gradient: var(--skills-gradient);"></div>
-                    </div>
-                    
-                    <div class="metric-card rounded-2xl p-6 text-center">
-                        <div class="score-circle-outer mx-auto mb-4">
-                            <div class="score-circle-progress" id="experienceScoreProgress" data-score="{{ ats_result.experience_match }}" data-gradient="var(--experience-gradient)"></div>
-                            <div class="score-circle-inner flex items-center justify-center">
-                                <span class="text-2xl font-bold text-white">{{ ats_result.experience_match }}%</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Experience Match</h3>
-                        <div class="progress-bar w-full" style="--width: {{ ats_result.experience_match }}%; --bar-gradient: var(--experience-gradient);"></div>
-                    </div>
-                    
-                    <div class="metric-card rounded-2xl p-6 text-center">
-                        <div class="score-circle-outer mx-auto mb-4">
-                            <div class="score-circle-progress" id="educationScoreProgress" data-score="{{ ats_result.education_match }}" data-gradient="var(--education-gradient)"></div>
-                            <div class="score-circle-inner flex items-center justify-center">
-                                <span class="text-2xl font-bold text-white">{{ ats_result.education_match }}%</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Education Match</h3>
-                        <div class="progress-bar w-full" style="--width: {{ ats_result.education_match }}%; --bar-gradient: var(--education-gradient);"></div>
-                    </div>
+<div class="glass-card rounded-3xl p-8">
+    <h2 class="text-3xl font-bold text-white mb-8 text-center">
+        <i class="fas fa-tachometer-alt mr-3 text-cyan-400"></i>
+        ATS Compatibility Scores
+    </h2>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="metric-card rounded-2xl p-6 text-center">
+            <div class="score-circle-outer mx-auto mb-4">
+                <div class="score-circle-progress" id="overallScoreProgress" data-score="{{ ats_result.overall_match }}" data-gradient="var(--overall-gradient)"></div>
+                <div class="score-circle-inner flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{{ ats_result.overall_match }}%</span>
                 </div>
             </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Overall Match</h3>
+            <div class="progress-bar w-full" style="--width: {{ ats_result.overall_match }}%; --bar-gradient: var(--overall-gradient);"></div>
+        </div>
+        
+        <div class="metric-card rounded-2xl p-6 text-center">
+            <div class="score-circle-outer mx-auto mb-4">
+                <div class="score-circle-progress" id="skillsScoreProgress" data-score="{{ ats_result.skills_match }}" data-gradient="var(--skills-gradient)"></div>
+                <div class="score-circle-inner flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{{ ats_result.skills_match }}%</span>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Skills Match</h3>
+            <div class="progress-bar w-full" style="--width: {{ ats_result.skills_match }}%; --bar-gradient: var(--skills-gradient);"></div>
+        </div>
+        
+        <div class="metric-card rounded-2xl p-6 text-center">
+            <div class="score-circle-outer mx-auto mb-4">
+                <div class="score-circle-progress" id="experienceScoreProgress" data-score="{{ ats_result.experience_match }}" data-gradient="var(--experience-gradient)"></div>
+                <div class="score-circle-inner flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{{ ats_result.experience_match }}%</span>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Experience Match</h3>
+            <div class="progress-bar w-full" style="--width: {{ ats_result.experience_match }}%; --bar-gradient: var(--experience-gradient);"></div>
+        </div>
+        
+        <div class="metric-card rounded-2xl p-6 text-center">
+            <div class="score-circle-outer mx-auto mb-4">
+                <div class="score-circle-progress" id="educationScoreProgress" data-score="{{ ats_result.education_match }}" data-gradient="var(--education-gradient)"></div>
+                <div class="score-circle-inner flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{{ ats_result.education_match }}%</span>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Education Match</h3>
+            <div class="progress-bar w-full" style="--width: {{ ats_result.education_match }}%; --bar-gradient: var(--education-gradient);"></div>
+        </div>
+    </div>
+</div>
 
             <div class="glass-card rounded-3xl p-8">
                 <h2 class="text-3xl font-bold text-white mb-8 text-center">
@@ -327,7 +326,7 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mr-4">
                                 <i class="fas fa-check-circle text-white"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white">Additional Tips</h3>
+                            <h3 class="text-xl font-semibold text-white">General Recommendations</h3>
                         </div>
                         <div class="space-y-2">
                             {% for item in suggestions.other_recommendations %}
